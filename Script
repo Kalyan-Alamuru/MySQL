@@ -1,0 +1,21 @@
+date
+ls -lart
+git clone https://github.com/Anuj1990/MySQL.git
+cd MySQL
+git branch develop
+git branch -l
+git checkout develop
+grep -A1 sauce_junit pom.xml > input.txt
+start=`cat input.txt | head -n 1 | tr -d '[:space:]'`
+end=`cat input.txt | tail -n 1 | tr -d '[:space:]'`
+oldversion=`echo $end | cut -d'>' -f2 | cut -d'<' -f1`
+version="2.1.4"
+string="<version>$version</version>"
+echo $string $start $end
+sed -i ':a;N;$!ba;s|'$start'.*'$end'|'$start'\n\t\t'$string'|g' pom.xml 
+cat pom.xml
+ls -lart
+git add pom.xml
+git commit -am "Updating pom file with new Version"
+git push origin develop
+curl -i -d '{"title": "New Pull Request","head": "dev","base": "master"}'  https://api.github.com/repos/anuj1990/pipeline-as-code-demo/pulls -u anuj_sharma401@yahoo.com:Anujsharma@1990
